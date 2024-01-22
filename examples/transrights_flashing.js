@@ -34,14 +34,13 @@ async function main(canvas){
             toad.move(2, 0);
             toad.render(24 + (frame % 8));
         } else if (frame < 32) {
-            // Toad should now be at x = 22
             toad.render(0)
             if (frame > 17 && frame < 30){
                 speechBubble.render(0);
                 
                 font.to(37, 3);
               	let text = "TRANS";
-                let color = frame % 2;
+                let color = Math.floor( (frame % 4) / 2);
               	for (let i = 0; i < text.length; i++){
                   color = (!color) + 0
                   font.image = fontColors[color];

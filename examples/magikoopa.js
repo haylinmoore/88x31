@@ -41,7 +41,7 @@ async function main(canvas){
         font.to(35, 7);
         font.renderText(text);
       }
-      if (frame > 70) {
+      if (frame > 70 && frame < 90) {
         text = text.slice(0, 5 - Math.max((frame - 70) / 4.2, 0));
         font.to(35, 7);
         font.renderText(text);
