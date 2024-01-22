@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>88x31 Animator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js" integrity="sha512-nNOFtIS+H0lwgdUDaPn/g1ssw3uN9AkEM7zy2wLaTQeLQNeNiitUcLpEpDIh3Z4T22MdeTNru/SQbNM4ig2rng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="./apng.js"></script>
+    <script src="./88x31.js"></script>
+
+    <style>
+        body {
+            font-size: 1em;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        #editor, .CodeMirror {
+            height: calc(100vh - 124px);
+            width: 100vw;
+            float: left;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        #topbar {
+            height: 124px;
+            width: 100vw;
+            float: left;
+        }
+
+        #topbar * {
+            float: left;
+        }
+
+        #tools {
+            margin: 10px;
+        }
+
+        #run {
+            width: 100px;
+        }
+
+        #badge {
+            image-rendering: optimizeSpeed;             /* Older versions of FF          */
+            image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+            image-rendering: -webkit-optimize-contrast; /* Safari                        */
+            image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+            image-rendering: pixelated;                 /* Awesome future-browsers       */
+            -ms-interpolation-mode: nearest-neighbor;  
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="88" height="31"></canvas>
+
+    <div id="topbar">
+        <div id="tools">
+            <input type="file" id="file" name="file" accept=".png,.gif,.jpg,.jpeg,.bmp,.webp">
+            <br>
+            <span id="bloburl">Blob uploader, choose file</span>
+            <br>
+            <br>
+            <button id="run">Run Code</button>
+        </div>
+        <img id="badge" alt="test" width="352" height="124" style="display: none;">
+    </div>
+
+    <div id="editor"></div>
+    <script type="text/plain" id="initial-code">async function main(canvas){
+    const ee31 = new EightyEightByThirtyOne(canvas, 69, 1000 / 12);
+
+    const backdrop = await Sprite.create("./assets/backdrop_mario.png", 88, 31, 1, 1);
+    const toad = await Sprite.create("./assets/toad.png", 18, 27, 8, 4);
+    const speechBubble = await Sprite.create("./assets/speech_bubble.png", 88, 31, 1, 1);
+    const font = await Font.create("./assets/spleen-8x16.png", 8, 16, 95, 1, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+
+    await font.mapColors(([r, g, b, a]) => {
+        if (r > 0){
+          return [245, 169, 184, 255];
+      }
+      return [0, 0, 0, 0]
+    });
+
+    ee31.attachLayerFunction('background', (ee31, frame) => {
+        const ctx = ee31.ctx;
+        backdrop.render(ctx, 0);
+    });
+    
+    ee31.attachLayerFunction('toad', (ee31, frame) => {
+        const ctx = ee31.ctx;
+        if (frame < 16) {
+            toad.move(2, 0);
+            toad.render(ee31.ctx, 24 + (frame % 8));
+        } else if (frame < 32) {
+            // Toad should now be at x = 22
+            toad.render(ee31.ctx, 0)
+            if (frame > 17 && frame < 30){
+                speechBubble.render(ee31.ctx, 0);
+                
+                font.to(37, 3)
+                font.renderText(ee31.ctx, "TRANS");
+                font.to(34, 14)
+                font.renderText(ee31.ctx, "RIGHTS");
+            }
+        } else {
+            toad.move(2, 0);
+            toad.render(ee31.ctx, 24 + (frame % 8));
+        }
+    }, (ee31)=> {
+        toad.to(-18, 1);
+        speechBubble.to(0, 1)
+    });
+
+    const url = await ee31.renderGif();
+    document.getElementById('badge').src = url;
+    document.getElementById('badge').style.display = 'block';
+}</script>
+
+    <script>
+        let editor;
+        document.addEventListener('DOMContentLoaded', function() {
+            var initialCode = document.getElementById("initial-code").textContent;
+            editor = CodeMirror(document.getElementById("editor"), {
+                value: initialCode,
+                mode: "javascript",
+                lineNumbers: true,
+                theme: "dracula"
+            });
+        });
+
+        const run = document.getElementById('run');
+
+        run.addEventListener("click", () => {
+            console.log("Running");
+
+            eval(editor.getValue());
+
+            const canvas = document.getElementById('canvas');
+
+            main(canvas);
+        });
+
+        const file = document.getElementById('file');
+        const dataurl = document.getElementById('bloburl');
+        // When the user selects a file, make it a blob and set it as the text of the label
+        file.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const blob = URL.createObjectURL(file);
+            dataurl.textContent = blob;
+        });
+
+    </script>
+</body>
+</html>
