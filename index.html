@@ -66,8 +66,15 @@
             <br>
             <span id="bloburl">Blob uploader, choose file</span>
             <br>
+            <select name="examples" id="examples">
+                <option disabled selected value> -- select an example -- </option>
+                <option value="magikoopa">Magikoopa</option>
+                <option value="umass">UMass</option>
+                <option value="transrights_flashing">Trans Rights Flashing</option>
+              </select>
             <br>
             <button id="run">Run Code</button>
+
         </div>
         <img id="badge" alt="test" width="352" height="124" style="display: none;">
     </div>
@@ -154,6 +161,15 @@
             const file = event.target.files[0];
             const blob = URL.createObjectURL(file);
             dataurl.textContent = blob;
+        });
+
+        const examples = document.getElementById('examples');
+        examples.addEventListener('change', (event) => {
+            fetch(`./examples/${event.target.value}.js`)
+                .then(response => response.text())
+                .then(text => {
+                    editor.setValue(text);
+                });
         });
 
     </script>
