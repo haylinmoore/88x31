@@ -34,6 +34,10 @@
             float: left;
         }
 
+        #topbar div {
+            margin-right: 20px;
+        }
+
         #topbar * {
             float: left;
         }
@@ -62,18 +66,23 @@
 
     <div id="topbar">
         <div id="tools">
-            <input type="file" id="file" name="file" accept=".png,.gif,.jpg,.jpeg,.bmp,.webp">
-            <br>
-            <span id="bloburl">Blob uploader, choose file</span>
-            <br>
-            <select name="examples" id="examples">
-                <option disabled selected value> -- select an example -- </option>
-                <option value="magikoopa">Magikoopa</option>
-                <option value="umass">UMass</option>
-                <option value="transrights_flashing">Trans Rights Flashing</option>
-              </select>
-            <br>
-            <button id="run">Run Code</button>
+            <div>
+                <input type="file" id="file" name="file" accept=".png,.gif,.jpg,.jpeg,.bmp,.webp">
+                <br>
+                <span id="bloburl">Blob uploader, choose file</span>
+                <br>
+                <br>
+                <label for="examples">Examples:</label>
+                <select name="examples" id="examples">
+                    <option disabled selected value> -- select an example -- </option>
+                    <option value="magikoopa">Magikoopa</option>
+                    <option value="umass">UMass</option>
+                    <option value="transrights_flashing">Trans Rights Flashing</option>
+                </select>
+            </div>
+            <div>
+                <button id="run">Run Code</button>
+            </div>
 
         </div>
         <img id="badge" alt="test" width="352" height="124" style="display: none;">
