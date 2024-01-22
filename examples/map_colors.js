@@ -1,8 +1,9 @@
 async function main(canvas){
-    const ee31 = new EightyEightByThirtyOne(canvas, 100, 1000 / 12);
-  
-    const magicBase = await Sprite.create("./assets/magic.png", 27, 24, 4, 4);
-  	const magicYellow = await Sprite.create("./assets/magic.png", 27, 24, 4, 4);
+    const ee31 = new EightyEightByThirtyOne(canvas, 16, 1000 / 12);
+    const ctx = ee31.ctx;
+
+    const magicBase = await Sprite.create(ctx, "./assets/magic.png", 27, 24, 4, 4);
+  	const magicYellow = await Sprite.create(ctx, "./assets/magic.png", 27, 24, 4, 4);
   
   	await magicYellow.mapColors(([r, g, b, a]) => {
         if (r > 0){
@@ -15,8 +16,8 @@ async function main(canvas){
     ee31.attachLayerFunction('magic', (ee31, frame) => {
         const ctx = ee31.ctx;
         
-      	magicBase.render(ctx, frame % 16);
-      	magicYellow.render(ctx, frame % 16);
+      	magicBase.render(frame % 16);
+      	magicYellow.render( frame % 16);
       	
     }, (ee31)=> {
         magicBase.to(10, 2);

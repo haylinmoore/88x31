@@ -1,8 +1,9 @@
 async function main(canvas){
     const ee31 = new EightyEightByThirtyOne(canvas, 1, 1000);
+    const ctx = ee31.ctx;
 
-    const sam = await Sprite.create("./assets/sam.png", 23, 27, 1, 1);
-    const font = await Font.create("./assets/spleen-8x16.png", 8, 16, 95, 1, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+    const sam = await Sprite.create(ctx, "./assets/sam.png", 23, 27, 1, 1);
+    const font = await Font.create(ctx, "./assets/spleen-8x16.png", 8, 16, 95, 1, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
   
     await font.mapColors(([r, g, b, a]) => {
         if (r == 0){
@@ -28,12 +29,12 @@ async function main(canvas){
         }
 
       	font.to(36, 2);
-        font.renderText(ctx, "UMass");
+        font.renderText("UMass");
       	font.to(29, 14);
-        font.renderText(ctx, "Amherst");
+        font.renderText("Amherst");
       
         sam.to(5, 2);
-      	sam.render(ctx, 0);
+      	sam.render(0);
     });
 
     const url = await ee31.renderGif();

@@ -118,7 +118,8 @@ const fillPixel = (ctx, x, y) => {
 
 
 class Sprite {
-    constructor(image, spriteWidth, spriteHeight, columns, rows) {
+    constructor(ctx, image, spriteWidth, spriteHeight, columns, rows) {
+        this.ctx = ctx;
         this.image = image;
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
@@ -129,14 +130,14 @@ class Sprite {
         this.y = 0;
     }
 
-    static async create(imageUrl, spriteWidth, spriteHeight, columns, rows) {
+    static async create(ctx, imageUrl, spriteWidth, spriteHeight, columns, rows) {
         const image = new Image();
         await new Promise((resolve, reject) => {
             image.onload = () => resolve();
             image.onerror = reject;
             image.src = imageUrl;
         });
-        return new Sprite(image, spriteWidth, spriteHeight, columns, rows);
+        return new Sprite(ctx, image, spriteWidth, spriteHeight, columns, rows);
     }
 
     to(x, y) {
@@ -152,10 +153,8 @@ class Sprite {
     }
 
     // Render a sprite at the specified index to position (x, y) on the canvas context
-    render(ctx, index) {
-        if (!ctx) {
-            throw new Error('Canvas context is required to render a sprite.');
-        }
+    render(index) {
+        const ctx = this.ctx;
 
         const column = index % this.columns;
         const row = Math.floor(index / this.columns);
@@ -214,29 +213,29 @@ class Sprite {
 }
 
 class Font extends Sprite {
-    constructor(image, spriteWidth, spriteHeight, columns, rows, characters) {
-        super(image, spriteWidth, spriteHeight, columns, rows);
+    constructor(ctx, image, spriteWidth, spriteHeight, columns, rows, characters) {
+        super(ctx, image, spriteWidth, spriteHeight, columns, rows);
         this.characters = characters;
     }
 
-    static async create(imageUrl, spriteWidth, spriteHeight, columns, rows, characters) {
+    static async create(ctx, imageUrl, spriteWidth, spriteHeight, columns, rows, characters) {
         const image = new Image();
         await new Promise((resolve, reject) => {
             image.onload = () => resolve();
             image.onerror = reject;
             image.src = imageUrl;
         });
-        return new Font(image, spriteWidth, spriteHeight, columns, rows, characters);
+        return new Font(ctx, image, spriteWidth, spriteHeight, columns, rows, characters);
     }
 
-    renderText(ctx, text) {
+    renderText(text) {
         for (let i = 0; i < text.length; i++) {
             let char = text[i];
             let index = this.characters.indexOf(char);
             if (index === -1) {
                 throw new Error('Character "' + char + '" not found in font.');
             }
-            this.render(ctx, index);
+            this.render(index);
             this.move(this.spriteWidth, 0);
         }
     }

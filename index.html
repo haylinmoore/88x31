@@ -94,12 +94,12 @@
     <div id="editor"></div>
     <script type="text/plain" id="initial-code">async function main(canvas){
     const ee31 = new EightyEightByThirtyOne(canvas, 1, 1000);
-
-    const backdrop = await Sprite.create("./assets/backdrop_mario.png", 88, 31, 1, 1);
+    const ctx = ee31.ctx;
+    
+    const backdrop = await Sprite.create(ctx, "./assets/backdrop_mario.png", 88, 31, 1, 1);
     
     ee31.attachLayerFunction('background', (ee31, frame) => {
-        const ctx = ee31.ctx;
-        backdrop.render(ctx, 0);
+        backdrop.render(0);
     });
 
     const url = await ee31.renderGif();
