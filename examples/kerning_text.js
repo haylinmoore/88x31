@@ -19,7 +19,5 @@ async function main(canvas){
         font.renderText("!");
     });
 
-    const url = await ee31.renderGif();
-    document.getElementById('badge').src = url;
-    document.getElementById('badge').style.display = 'block';
+    return ee31.renderGif();
 }

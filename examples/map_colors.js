@@ -24,7 +24,5 @@ async function main(canvas){
       	magicYellow.to(50, 2);
     });
   
-    const url = await ee31.renderGif();
-    document.getElementById('badge').src = url;
-    document.getElementById('badge').style.display = 'block';
+    return ee31.renderGif();
   }

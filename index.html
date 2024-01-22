@@ -102,9 +102,7 @@
         backdrop.render(0);
     });
 
-    const url = await ee31.renderGif();
-    document.getElementById('badge').src = url;
-    document.getElementById('badge').style.display = 'block';
+    return ee31.renderGif();
 }</script>
 
     <script>
@@ -128,7 +126,9 @@
                 eval(editor.getValue());
                 const canvas = document.getElementById('canvas');
 
-                await main(canvas);
+                const url = await main(canvas);
+                document.getElementById('badge').src = url;
+                document.getElementById('badge').style.display = 'block';
             } catch (e) {
                 alert(e.message);
             }
