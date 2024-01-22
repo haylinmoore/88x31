@@ -49,7 +49,7 @@ class EightyEightByThirtyOne {
     }
 
     async renderGif() {
-        let gifLoading = await fetch('https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js');
+        let gifLoading = await fetch('./libs/gif.worker.js');
         let workerBlob = await gifLoading.blob();
         let container = this.canvas;
         let gif = new GIF({
@@ -57,7 +57,8 @@ class EightyEightByThirtyOne {
             workerScript: URL.createObjectURL(workerBlob),
             quality: 0,
             width: 88,
-            height: 31
+            height: 31,
+            preserveColors: true,
         });
 
         let frame = 0;
